@@ -1,0 +1,24 @@
+kind: SecurityPolicy
+apiVersion: config.stackrox.io/v1alpha1
+metadata:
+  name: vim-in-image
+spec:
+  policyName: 'Vim in Image'
+  categories:
+    - 'Package Management'
+  description: 'This policy checks for container images with the package "vim" present'
+  disabled: false
+  guidance: 'Use the base image package manager to remove "vim"'
+  lifecycleStages:
+    - BUILD
+    - DEPLOY
+  policySections:
+    - sectionName: "Rule 1"
+      policyGroups:
+        - fieldName: Image Component
+          booleanOperator: OR
+          negate: false
+          values:
+            - value: vim=
+  rationale: 'Attackers can potentially exploit flaws in vim, or use vim to modify the container running config'
+  severity: 'HIGH_SEVERITY'
