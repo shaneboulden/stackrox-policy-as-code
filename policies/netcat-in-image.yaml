@@ -1,0 +1,24 @@
+kind: SecurityPolicy
+apiVersion: config.stackrox.io/v1alpha1
+metadata:
+  name: netcat-in-image
+spec:
+  policyName: 'Netcat in Image'
+  categories:
+    - 'Package Management'
+  description: 'This policy checks for container images containing netcat '
+  disabled: false
+  remediation: 'Use the base image package manager to remove "nmap-ncat"'
+  lifecycleStages:
+    - BUILD
+    - DEPLOY
+  policySections:
+    - sectionName: "Rule 1"
+      policyGroups:
+        - fieldName: Image Component
+          booleanOperator: OR
+          negate: false
+          values:
+            - value: nmap-ncat=
+  rationale: 'Netcat potentially allows attackers to move laterally, and access external services from a running pod'
+  severity: 'HIGH_SEVERITY'
