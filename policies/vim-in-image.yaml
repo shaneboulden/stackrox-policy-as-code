@@ -8,7 +8,7 @@ spec:
     - 'Package Management'
   description: 'This policy checks for container images with the package "vim" present'
   disabled: false
-  guidance: 'Use the base image package manager to remove "vim"'
+  remediation: 'Use the base image package manager to remove "vim"'
   lifecycleStages:
     - BUILD
     - DEPLOY

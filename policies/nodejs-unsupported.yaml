@@ -12,7 +12,7 @@ spec:
     - SCALE_TO_ZERO_ENFORCEMENT
     - FAIL_BUILD_ENFORCEMENT
     - FAIL_DEPLOYMENT_CREATE_ENFORCEMENT
-  guidance: 'Use a supported version of Node.js. Supported versions can be found at https://nodejs.org/en/about/previous-releases'
+  remediation: 'Use a supported version of Node.js. Supported versions can be found at https://nodejs.org/en/about/previous-releases'
   lifecycleStages:
     - BUILD
     - DEPLOY
