@@ -1,0 +1,26 @@
+kind: SecurityPolicy
+apiVersion: config.stackrox.io/v1alpha1
+metadata:
+  name: 30-day-scan-age
+spec:
+  policyName: 30-Day Scan Age
+  categories:
+  - Security Best Practices
+  - Supply Chain Security
+  description: Alert on deployments with images that haven't been scanned in 30 days
+  disabled: true
+  remediation: Integrate a scanner with the StackRox Kubernetes Security Platform
+    to trigger scans automatically.
+  lifecycleStages:
+  - DEPLOY
+  policySections:
+  - sectionName: ''
+    policyGroups:
+    - fieldName: Image Scan Age
+      booleanOperator: OR
+      negate: false
+      values:
+      - value: '30'
+  rationale: Out-of-date scans may not identify the most recent CVEs.
+  severity: MEDIUM_SEVERITY
+  isDefault: true
