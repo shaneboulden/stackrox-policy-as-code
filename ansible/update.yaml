@@ -1,0 +1,24 @@
+---
+hosts: all
+become: no
+tasks:
+  - name: Git checkout
+    ansible.builtin.git:
+      repo: 'https://github.com/shaneboulden/stackrox-policy-as-code'
+      dest: /tmp/checkout
+      version: main
+
+  - name: Create a new branch
+    shell: "cd /tmp/checkout && git checkout -b pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
+
+  - name: Add new file for the update
+    template:
+      src: new-policy.j2
+      dest: "/tmp/checkout/policies/{{ file_name }}"
+      mode: 0644
+
+  - name: Create a new commit
+    shell: git add {{ file_name }} && git commit -m "{{ git_message }}"
+
+  - name: Push new changes
+    shell: git push origin pac-updates
