@@ -1,6 +1,6 @@
 ---
 hosts: all
-become: no
+become: false
 tasks:
   - name: Git checkout
     ansible.builtin.git:
@@ -10,7 +10,7 @@ tasks:
 
   - name: Create a new random identifier
     command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
-    register: output 
+    register: output
 
   - name: Create a new branch
     shell: "cd /tmp/checkout && git checkout -b {{ output.stdout }}"
@@ -19,7 +19,7 @@ tasks:
     template:
       src: new-policy.j2
       dest: "/tmp/checkout/policies/{{ file_name }}"
-      mode: 0644
+      mode: 644
 
   - name: Create a new commit
     shell: git add {{ file_name }} && git commit -m "{{ git_message }}"
