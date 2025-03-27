@@ -1,0 +1,30 @@
+kind: SecurityPolicy
+apiVersion: config.stackrox.io/v1alpha1
+metadata:
+  name: leaky-vessels:-runc-container-breakout
+spec:
+  policyName: 'Leaky Vessels: runc container breakout'
+  categories:
+  - Anomalous Activity
+  - Kubernetes
+  description: CVE-2024-21626 is a vulnerability in the runc container runtime allowing
+    an attacker to break out of the container isolation and achieve full root RCE
+    via a crafted image that exploits an issue within the WORKDIR instruction's handling.
+  disabled: false
+  remediation: Remove Containerfile lines resembling 'WORKDIR /proc/self/fd/[ID]'
+    (with ID being a system dependent file descriptor)
+  lifecycleStages:
+  - BUILD
+  - DEPLOY
+  policySections:
+  - sectionName: Policy Section 1
+    policyGroups:
+    - fieldName: Dockerfile Line
+      booleanOperator: OR
+      negate: false
+      values:
+      - value: WORKDIR=.*\/proc\/self\/fd\/.*
+  rationale: This vulnerability potentially allows an attacker to access host resources
+    using a crafted file descriptor from the container, impacting both build and deployment
+    operations.
+  severity: HIGH_SEVERITY
