@@ -1,6 +1,10 @@
 ---
 hosts: all
 become: false
+vars:
+  stackrox_policy_cr:
+  file_name:
+  git_message:
 tasks:
   - name: Git checkout
     ansible.builtin.git:
