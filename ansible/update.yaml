@@ -15,9 +15,14 @@
     - name: Create a new random identifier
       command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
       register: output
+
+    - name: show branch
+      debug: var=output
   
     - name: Create a new branch
-      shell: "cd /tmp/checkout && git checkout -b {{ output.stdout }}"
+      shell: 
+        cmd: git checkout -b "{{ output.stdout }}"
+        chdir: /tmp/checkout
   
     - name: Add new file for the update
       template:
@@ -26,7 +31,12 @@
         mode: 644
   
     - name: Create a new commit
-      shell: git add {{ file_name }} && git commit -m "{{ git_message }}"
+      shell: 
+        cmd: git add {{ file_name }} && git commit -m "{{ git_message }}"
+        chdir: /tmp/checkout
   
     - name: Push new changes
-      shell: git push origin output.stdout
+      shell: 
+        cmd: git push origin "{{ output.stdout }}"
+        chdir: /tmp/checkout
+
