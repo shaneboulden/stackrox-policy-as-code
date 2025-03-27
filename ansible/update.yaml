@@ -8,8 +8,12 @@ tasks:
       dest: /tmp/checkout
       version: main
 
+  - name: Create a new random identifier
+    command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
+    register: output 
+
   - name: Create a new branch
-    shell: "cd /tmp/checkout && git checkout -b pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
+    shell: "cd /tmp/checkout && git checkout -b {{ output.stdout }}"
 
   - name: Add new file for the update
     template:
@@ -21,4 +25,4 @@ tasks:
     shell: git add {{ file_name }} && git commit -m "{{ git_message }}"
 
   - name: Push new changes
-    shell: git push origin pac-updates
+    shell: git push origin output.stdout
