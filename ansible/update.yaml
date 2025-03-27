@@ -1,32 +1,32 @@
 ---
-hosts: all
-become: false
-vars:
-  stackrox_policy_cr:
-  file_name:
-  git_message:
-tasks:
-  - name: Git checkout
-    ansible.builtin.git:
-      repo: 'https://github.com/shaneboulden/stackrox-policy-as-code'
-      dest: /tmp/checkout
-      version: main
-
-  - name: Create a new random identifier
-    command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
-    register: output
-
-  - name: Create a new branch
-    shell: "cd /tmp/checkout && git checkout -b {{ output.stdout }}"
-
-  - name: Add new file for the update
-    template:
-      src: new-policy.j2
-      dest: "/tmp/checkout/policies/{{ file_name }}"
-      mode: 644
-
-  - name: Create a new commit
-    shell: git add {{ file_name }} && git commit -m "{{ git_message }}"
-
-  - name: Push new changes
-    shell: git push origin output.stdout
+- hosts: all
+  become: false
+  vars:
+    stackrox_policy_cr:
+    file_name:
+    git_message:
+  tasks:
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/shaneboulden/stackrox-policy-as-code'
+        dest: /tmp/checkout
+        version: main
+  
+    - name: Create a new random identifier
+      command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
+      register: output
+  
+    - name: Create a new branch
+      shell: "cd /tmp/checkout && git checkout -b {{ output.stdout }}"
+  
+    - name: Add new file for the update
+      template:
+        src: new-policy.j2
+        dest: "/tmp/checkout/policies/{{ file_name }}"
+        mode: 644
+  
+    - name: Create a new commit
+      shell: git add {{ file_name }} && git commit -m "{{ git_message }}"
+  
+    - name: Push new changes
+      shell: git push origin output.stdout
