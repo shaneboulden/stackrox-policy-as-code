@@ -11,6 +11,20 @@
         repo: 'https://github.com/shaneboulden/stackrox-policy-as-code'
         dest: /tmp/checkout
         version: main
+
+    - name: Git config email
+      community.general.git_config:
+        name: user.email
+        repo: /tmp/checkout
+        scope: local
+        value: "ansible@{{ ansible_fqdn }}"
+
+    - name: Git config username
+      community.general.git_config:
+        name: user.username
+        repo: /tmp/checkout
+        scope: local
+        value: "ansible"
   
     - name: Create a new random identifier
       command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
