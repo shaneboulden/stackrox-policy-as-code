@@ -32,7 +32,7 @@
   
     - name: Create a new commit
       shell: 
-        cmd: git add {{ file_name }} && git commit -m "{{ git_message }}"
+        cmd: git add policies/{{ file_name }} && git commit -m "{{ git_message }}"
         chdir: /tmp/checkout
   
     - name: Push new changes
