@@ -40,8 +40,13 @@
     - name: Add new file for the update
       template:
         src: new-policy.j2
-        dest: "/tmp/checkout/policies/{{ file_name }}"
+        dest: "/tmp/checkout/policies/new-policy.json"
         mode: 644
+
+    - name: Convert the policy
+      shell:
+        cmd: python export2gitops.py -i policies/new-policy.json -o {{ file_name }}
+        chdir: /tmp/checkout/
   
     - name: Create a new commit
       shell: 
@@ -53,3 +58,6 @@
         cmd: git push origin "{{ output.stdout }}"
         chdir: /tmp/checkout
 
+    - name: Create a new PR
+      shell:
+        cmd: "python create-pr.py --username {{ github_username }} --token {{ github_pat }} --repo-owner shaneboulden --repo-name stackrox-policy-as-code --head {{ output.stdout }} --base main --title {{ git_message }}"
