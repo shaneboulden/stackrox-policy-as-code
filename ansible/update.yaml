@@ -6,6 +6,8 @@
     file_name:
     git_message:
     github_username:
+    github_email:
+    github_pat:
   tasks:
     - name: Git checkout
       ansible.builtin.git:
@@ -13,19 +15,15 @@
         dest: /tmp/checkout
         version: main
 
-    - name: Git config email
-      community.general.git_config:
-        name: user.email
-        repo: /tmp/checkout
-        scope: local
-        value: "ansible@{{ ansible_fqdn }}"
+    - name: Git config github
+      shell:
+        cmd: git config user.name "{{ github_username }}"
+        chdir: /tmp/checkout
 
-    - name: Git config username
-      community.general.git_config:
-        name: user.username
-        repo: /tmp/checkout
-        scope: local
-        value: "ansible"
+    - name: Git config email
+      shell:
+        cmd: git config user.email "{{ github_email }}"
+        chdir: /tmp/checkout
   
     - name: Create a new random identifier
       command: "echo pac-updates-{{ lookup('ansible.builtin.password', '/dev/null', length=5, chars='digits') }}"
