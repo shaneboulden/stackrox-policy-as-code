@@ -5,10 +5,11 @@
     stackrox_policy_cr:
     file_name:
     git_message:
+    github_username:
   tasks:
     - name: Git checkout
       ansible.builtin.git:
-        repo: 'https://github.com/shaneboulden/stackrox-policy-as-code'
+        repo: "https://{{ github_username | urlencode }}:{{ github_pat | urlencode }}@github.com/shaneboulden/stackrox-policy-as-code"
         dest: /tmp/checkout
         version: main
 
