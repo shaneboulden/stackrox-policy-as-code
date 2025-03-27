@@ -61,3 +61,4 @@
     - name: Create a new PR
       shell:
         cmd: "python create-pr.py --username {{ github_username }} --token {{ github_pat }} --repo-owner shaneboulden --repo-name stackrox-policy-as-code --head {{ output.stdout }} --base main --title {{ git_message }}"
+        chdir: /tmp/checkout
