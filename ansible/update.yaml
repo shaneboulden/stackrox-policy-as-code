@@ -40,13 +40,8 @@
     - name: Add new file for the update
       template:
         src: new-policy.j2
-        dest: "/tmp/checkout/policies/new-policy.json"
+        dest: "/tmp/checkout/policies/{{ file_name }}.yaml"
         mode: 644
-
-    - name: Convert the policy
-      shell:
-        cmd: python export2gitops.py -i policies/new-policy.json -o policies/{{ file_name }}
-        chdir: /tmp/checkout/
   
     - name: Create a new commit
       shell: 
