@@ -40,7 +40,7 @@
     - name: Add new file for the update
       template:
         src: new-policy.j2
-        dest: "/tmp/checkout/policies/{{ file_name }}.yaml"
+        dest: "/tmp/checkout/policies/{{ file_name }}"
         mode: 644
   
     - name: Create a new commit
