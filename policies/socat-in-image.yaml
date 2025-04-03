@@ -1,0 +1,26 @@
+apiVersion: config.stackrox.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: socat-in-image
+spec:
+  policyName: Socat in image
+  description: This policy alerts on deployments referencing container images that contain socat.
+  rationale: Socat can be used to probe and connect to network services, or open listening ports. If present inside a container image, it could allow threat actors to effectively 'live off the land', using existing tools to move laterally through the network.
+  remediation: Use your base image package manager to remove the 'socat' package.
+  categories:
+    - Security Best Practices
+  lifecycleStages:
+    - BUILD
+    - DEPLOY
+  eventSource: NOT_APPLICABLE
+  severity: HIGH_SEVERITY
+  policySections:
+    - sectionName: Rule 1
+      policyGroups:
+        - fieldName: Image Component
+          booleanOperator: OR
+          values:
+            - value: socat=
+  criteriaLocked: false
+  mitreVectorsLocked: false
+  isDefault: false
