@@ -1,0 +1,23 @@
+apiVersion: config.stackrox.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: socat-in-image
+spec:
+  policyName: socat in image
+  categories:
+    - Package Management
+  lifecycleStages:
+    - BUILD
+    - DEPLOY
+  eventSource: NOT_APPLICABLE
+  severity: HIGH_SEVERITY
+  policySections:
+    - sectionName: Rule 1
+      policyGroups:
+        - fieldName: Image Component
+          booleanOperator: OR
+          values:
+            - value: socat=
+  criteriaLocked: false
+  mitreVectorsLocked: false
+  isDefault: false
